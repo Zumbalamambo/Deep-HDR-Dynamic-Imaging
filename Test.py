@@ -17,4 +17,4 @@ result_path = RESULT + '/' + sceneName
 make_dir(result_path)
 
 exposures = read_exposure(scenePath)
-LDR_images, Label = read_images(scenePath)
+LDR_images, label = read_images(scenePath)
