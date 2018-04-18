@@ -29,8 +29,8 @@ def read_folder(path):
 
 
 def make_dir(path):
-    if not os.path.exists(path):
-        os.mkdir(path)
+    if not os.path.exists(path):	
+        os.makedirs(path)
 
 
 def read_exposure(path):
@@ -44,11 +44,11 @@ def read_exposure(path):
 
 
 def read_images(path):
-    tif_matcher = __get_specific_contents__(path, '.tif')
+    tif_matcher = sorted(__get_specific_contents__(path, '.tif'))  # TODO: sorting required to read files serially
     input_images = []
     for image in tif_matcher:
         im = np.asarray(tiff.imread(path + '/' + image)) / 65535  # TODO: Cross check for 16-bit images
-        im = __clamp__(im, 0, 1)
+        im = clamp(im, 0, 1)
         input_images.append(im)
     images = np.asarray(input_images)
 
@@ -60,7 +60,7 @@ def read_images(path):
     # class type is imageio.core.util.Image
     # Already in single precision
     hdr = imageio.imread(path + '/' + hdr_matcher[0], format='HDR-FI')
-    hdr = __clamp__(hdr, 0, 1)  # TODO: required for a .hdr image?
+    hdr = clamp(hdr, 0, 1)  # TODO: required for a .hdr image?
 
     return images, hdr
 
@@ -70,7 +70,7 @@ def __get_specific_contents__(path, extension):
     return [file for file in folder_contents if extension in file]
 
 
-def __clamp__(image, a, b):
+def clamp(image, a, b):
     out = image
     out[out < a] = a
     out[out > b] = b
