@@ -34,7 +34,7 @@ def make_dir(path):
 
 
 def read_exposure(path):
-    txt_matcher = __get_specific_contents__(path, '.txt')
+    txt_matcher = get_specific_contents(path, '.txt')
     if not txt_matcher:
         return None
     exposure_file = open(path + '/' + txt_matcher[0], 'r')
@@ -44,7 +44,7 @@ def read_exposure(path):
 
 
 def read_images(path):
-    tif_matcher = sorted(__get_specific_contents__(path, '.tif'))  # TODO: sorting required to read files serially
+    tif_matcher = sorted(get_specific_contents(path, '.tif'))  # TODO: sorting required to read files serially
     input_images = []
     for image in tif_matcher:
         im = np.asarray(tiff.imread(path + '/' + image)) / 65535  # TODO: Cross check for 16-bit images
@@ -52,7 +52,7 @@ def read_images(path):
         input_images.append(im)
     images = np.asarray(input_images)
 
-    hdr_matcher = __get_specific_contents__(path, '.hdr')
+    hdr_matcher = get_specific_contents(path, '.hdr')
     if hdr_matcher:
         # TODO
         pass
@@ -65,7 +65,7 @@ def read_images(path):
     return images, hdr
 
 
-def __get_specific_contents__(path, extension):
+def get_specific_contents(path, extension):
     folder_contents = os.listdir(path)
     return [file for file in folder_contents if extension in file]
 
